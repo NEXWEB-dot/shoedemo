@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Belvarro — Premium Athletic & Lifestyle Footwear</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            barlow: ['Barlow', 'sans-serif'],
+            playfair: ['Playfair Display', 'serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Barlow', sans-serif; transition: background 0.3s, color 0.3s; }
+
+    /* Theme variables */
+    :root {
+      --bg: #ffffff; --surface: #f5f5f5; --card: #ffffff; --text: #1a1a1a;
+      --muted: #6b7280; --accent: #e46254; --lime: #d2ff28; --border: #e5e7eb;
+      --card-shadow: 0 1px 3px rgba(0,0,0,0.1); --header-bg: rgba(255,255,255,0.95);
+      --overlay-bg: rgba(0,0,0,0.5); --input-bg: #f9fafb; --badge-bg: #f3f4f6;
+      --scrollbar-track: #f5f5f5; --scrollbar-thumb: #d1d5db;
+      --footer-bg: #f5f5f5; --promo-bg: #1a1a1a; --promo-text: #ffffff;
+    }
+    .dark {
+      --bg: #161616; --surface: #1b1b1b; --card: #262626; --text: #f8f8f8;
+      --muted: #83858c; --accent: #e46254; --lime: #d2ff28; --border: #333333;
+      --card-shadow: 0 1px 3px rgba(0,0,0,0.3); --header-bg: rgba(22,22,22,0.95);
+      --overlay-bg: rgba(0,0,0,0.7); --input-bg: #1b1b1b; --badge-bg: #333;
+      --scrollbar-track: #1b1b1b; --scrollbar-thumb: #333;
+      --footer-bg: #1b1b1b; --promo-bg: #0a0a0a; --promo-text: #f8f8f8;
+    }
+
+    body { background: var(--bg); color: var(--text); }
+
+    /* Sharp edges everywhere except swatches */
+    * { border-radius: 0 !important; }
+    .swatch { border-radius: 50% !important; }
+    .cart-badge { border-radius: 50% !important; }
+    .back-to-top { border-radius: 50% !important; }
+    .size-btn-round { border-radius: 4px !important; }
+
+    /* Product card hover effects */
+    .product-card { position: relative; overflow: hidden; background: var(--card); box-shadow: var(--card-shadow); transition: background 0.3s, box-shadow 0.3s, transform 0.3s; }
+    .product-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+    .product-card .card-img-wrap { position: relative; overflow: hidden; background: #e8e8e8; aspect-ratio: 1/1; }
+    .product-card .img-main { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.35s ease; }
+    .product-card .img-hover { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.35s ease; }
+    .product-card:hover .img-main { opacity: 0; }
+    .product-card:hover .img-hover { opacity: 1; }
+
+    /* Quick Add button */
+    .quick-add-btn {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      transform: translateY(100%);
+      transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+      background: var(--muted); color: #fff;
+      text-align: center; padding: 12px;
+      font-size: 0.85rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      cursor: pointer; border: none; width: 100%;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .product-card:hover .quick-add-btn { transform: translateY(0); }
+
+    /* Badge */
+    .badge-sale {
+      position: absolute; top: 10px; left: 10px;
+      background: var(--accent); color: #fff;
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.04em; text-transform: uppercase;
+      padding: 4px 8px; z-index: 2;
+    }
+    .badge-new { background: #22c55e !important; }
+
+    /* Nav hover */
+    nav a { transition: color 0.18s ease; }
+
+    /* Stars */
+    .stars { color: var(--accent); font-size: 0.85rem; letter-spacing: 1px; }
+
+    /* Select */
+    select { appearance: none; -webkit-appearance: none; cursor: pointer; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+    ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); }
+
+    /* Prices */
+    .price-sale { color: var(--accent); }
+    .price-orig { color: var(--muted); text-decoration: line-through; }
+
+    /* Header icon */
+    .header-icon { transition: opacity 0.18s; cursor: pointer; }
+    .header-icon:hover { opacity: 0.7; }
+
+    /* Nav underline */
+    .nav-link { position: relative; }
+    .nav-link::after {
+      content: ''; position: absolute; bottom: -2px; left: 0; right: 0;
+      height: 2px; background: var(--accent);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.22s ease;
+    }
+    .nav-link:hover::after, .nav-link.active::after { transform: scaleX(1); }
+    .nav-link.active { color: var(--text) !important; }
+
+    /* Platinum text */
+    .golden-text {
+      background: linear-gradient(135deg, #C0C0C0, #E8E8E8, #A0A0A0, #D4D4D4, #8A8A8A);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .dark .golden-text {
+      background: linear-gradient(135deg, #D0D0D0, #F5F5F5, #B8B8B8, #E8E8E8, #A0A0A0);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Product Detail Modal */
+    .product-modal {
+      position: fixed; inset: 0; z-index: 120;
+      background: var(--overlay-bg);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+      padding: 16px;
+    }
+    .product-modal.open { opacity: 1; pointer-events: auto; }
+    .product-modal-content {
+      background: var(--bg); max-width: 900px; width: 100%;
+      max-height: 90vh; overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      display: grid; grid-template-columns: 1fr;
+    }
+    @media (min-width: 768px) {
+      .product-modal-content { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* Checkout Modal */
+    .checkout-modal {
+      position: fixed; inset: 0; z-index: 130;
+      background: var(--overlay-bg);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+      padding: 16px;
+    }
+    .checkout-modal.open { opacity: 1; pointer-events: auto; }
+    .checkout-modal-content {
+      background: var(--bg); max-width: 480px; width: 100%;
+      max-height: 90vh; overflow-y: auto; padding: 24px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+
+    /* Hero */
+    .hero-section {
+      position: relative; min-height: 70vh;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0d0d0d 100%);
+      overflow: hidden;
+    }
+    .hero-section::before {
+      content: ''; position: absolute; inset: 0;
+      background: url('https://onedegree.com.pk/cdn/shop/files/001_0000_009593984-010-43_up_jpg_3.jpg?v=1773401672&width=640') center/cover;
+      opacity: 0.15; z-index: 0;
+    }
+    .hero-content { position: relative; z-index: 1; text-align: center; padding: 2rem; }
+
+    /* Slide panels */
+    .slide-panel {
+      position: fixed; top: 0; height: 100vh; z-index: 100;
+      background: var(--bg); box-shadow: -4px 0 20px rgba(0,0,0,0.3);
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow-y: auto;
+    }
+    .slide-panel.from-right { right: 0; width: 380px; max-width: 90vw; transform: translateX(100%); }
+    .slide-panel.from-left { left: 0; width: 320px; max-width: 85vw; transform: translateX(-100%); }
+    .slide-panel.open { transform: translateX(0); }
+
+    /* Overlay */
+    .panel-overlay {
+      position: fixed; inset: 0; background: var(--overlay-bg);
+      z-index: 99; opacity: 0; pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .panel-overlay.open { opacity: 1; pointer-events: auto; }
+
+    /* Search overlay */
+    .search-overlay {
+      position: fixed; inset: 0; z-index: 110;
+      background: var(--bg); opacity: 0; pointer-events: none;
+      transition: opacity 0.3s; display: flex; flex-direction: column;
+    }
+    .search-overlay.open { opacity: 1; pointer-events: auto; }
+
+    /* Mobile menu */
+    .mobile-menu {
+      position: fixed; inset: 0; z-index: 105;
+      background: var(--bg); transform: translateX(-100%);
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex; flex-direction: column;
+    }
+    .mobile-menu.open { transform: translateX(0); }
+
+    /* Back to top */
+    .back-to-top {
+      position: fixed; bottom: 24px; right: 24px; z-index: 90;
+      width: 48px; height: 48px; background: var(--accent); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; border: none; opacity: 0; pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .back-to-top.visible { opacity: 1; pointer-events: auto; }
+    .back-to-top:hover { transform: scale(1.1); }
+
+    /* Fade in animation */
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.5s, transform 0.5s; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* Promo ticker */
+    .promo-ticker {
+      background: var(--promo-bg); color: var(--promo-text);
+      overflow: hidden; white-space: nowrap;
+    }
+    .ticker-content {
+      display: inline-block; animation: ticker 25s linear infinite;
+    }
+    @keyframes ticker {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* Size selector */
+    .size-selector { display: none; position: absolute; bottom: 44px; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--border); padding: 8px; z-index: 5; }
+    .size-selector.open { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; }
+    .size-btn { padding: 6px 10px; font-size: 0.75rem; font-weight: 600; border: 1px solid var(--border); background: var(--bg); color: var(--text); cursor: pointer; transition: all 0.2s; min-width: 36px; text-align: center; }
+    .size-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+    /* Account dropdown */
+    .account-dropdown {
+      position: absolute; top: 100%; right: 0; background: var(--card);
+      border: 1px solid var(--border); min-width: 180px; z-index: 60;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2); display: none;
+    }
+    .account-dropdown.open { display: block; }
+    .account-dropdown a { display: block; padding: 10px 16px; color: var(--text); text-decoration: none; font-size: 0.85rem; transition: background 0.2s; }
+    .account-dropdown a:hover { background: var(--surface); }
+
+    /* Transitions for theme */
+    header, footer, .product-card, .slide-panel, .mobile-menu, .search-overlay,
+    .filter-btn, .sort-select, input, select, button {
+      transition: background 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+    }
+
+    /* Toast notification */
+    .toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px);
+      background: #22c55e; color: #fff; padding: 12px 24px;
+      font-weight: 600; font-size: 0.9rem; z-index: 200;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      border-radius: 0 !important;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+
+<body class="font-barlow">
+
+  <!-- Promo Ticker -->
+  <div class="promo-ticker py-2 text-xs font-semibold tracking-widest uppercase" style="font-size:0.7rem; letter-spacing:0.15em;">
+    <div class="ticker-content">
+      <span class="mx-8">🚚 FREE SHIPPING ON ORDERS ABOVE RS.5,000</span>
+      <span class="mx-8">🔥 FLAT 30% OFF SITEWIDE</span>
+      <span class="mx-8">⚡ NEW ARRIVALS JUST DROPPED</span>
+      <span class="mx-8">💎 PREMIUM QUALITY GUARANTEED</span>
+      <span class="mx-8">🚚 FREE SHIPPING ON ORDERS ABOVE RS.5,000</span>
+      <span class="mx-8">🔥 FLAT 30% OFF SITEWIDE</span>
+      <span class="mx-8">⚡ NEW ARRIVALS JUST DROPPED</span>
+      <span class="mx-8">💎 PREMIUM QUALITY GUARANTEED</span>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="sticky top-0 left-0 right-0 z-50" style="background:var(--header-bg); border-bottom:1px solid var(--border); height:72px; backdrop-filter:blur(12px);">
+    <div class="max-w-screen-2xl mx-auto px-4 md:px-6 h-full flex items-center justify-between">
+
+      <!-- Hamburger (mobile) -->
+      <button id="hamburgerBtn" class="md:hidden header-icon mr-2" aria-label="Menu" onclick="toggleMobileMenu()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+
+      <!-- Logo -->
+      <div class="flex items-center gap-2 flex-shrink-0">
+        <svg width="40" height="22" viewBox="0 0 52 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 28 L20 0 L28 8 L14 28 Z" fill="currentColor"/>
+          <path d="M18 28 L36 4 L52 4 L34 28 Z" fill="currentColor" opacity="0.6"/>
+        </svg>
+        <span class="font-bold text-lg tracking-widest">BELVARRO</span>
+      </div>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden md:flex items-center gap-6 lg:gap-7">
+        <a href="#products" class="nav-link text-sm font-semibold uppercase tracking-widest" style="color:var(--muted)" onclick="filterByCategory('all', this)" data-cat="all">All</a>
+        <a href="#products" class="nav-link text-sm font-semibold uppercase tracking-widest" style="color:var(--muted)" onclick="filterByCategory('new', this)" data-cat="new">New Arrivals</a>
+        <a href="#products" class="nav-link text-sm font-semibold uppercase tracking-widest" style="color:var(--muted)" onclick="filterByCategory('men', this)" data-cat="men">Men</a>
+        <a href="#products" class="nav-link text-sm font-semibold uppercase tracking-widest" style="color:var(--muted)" onclick="filterByCategory('women', this)" data-cat="women">Women</a>
+        <a href="#products" class="nav-link text-sm font-semibold uppercase tracking-widest" style="color:var(--muted)" onclick="filterByCategory('activewear', this)" data-cat="activewear">Activewear</a>
+        <a href="#products" class="nav-link text-sm font-semibold uppercase tracking-widest" style="color:var(--accent)" onclick="filterByCategory('sale', this)" data-cat="sale">Super Sale</a>
+      </nav>
+
+      <!-- Header Icons -->
+      <div class="flex items-center gap-3 md:gap-4">
+        <!-- Theme Toggle -->
+        <button class="header-icon" aria-label="Toggle theme" onclick="toggleTheme()" id="themeToggle">
+          <svg id="sunIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="hidden"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg id="moonIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+
+        <!-- Account -->
+        <div class="relative">
+          <button class="header-icon" aria-label="Account" onclick="toggleAccountDropdown()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+            </svg>
+          </button>
+          <div id="accountDropdown" class="account-dropdown">
+            <a href="#">👤 My Account</a>
+            <a href="#">📦 My Orders</a>
+            <a href="#">❤️ Wishlist</a>
+            <a href="#" style="border-top:1px solid var(--border)">🔑 Login / Register</a>
+          </div>
+        </div>
+
+        <!-- Search -->
+        <button class="header-icon" aria-label="Search" onclick="openSearch()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </button>
+
+        <!-- Cart -->
+        <button class="header-icon relative" aria-label="Cart" onclick="toggleCart()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+          <span id="cartBadge" class="cart-badge absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white text-xs font-bold flex items-center justify-center" style="display:none;">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="mobile-menu">
+    <div class="flex items-center justify-between p-4" style="border-bottom:1px solid var(--border)">
+      <span class="font-bold text-lg tracking-widest">BELVARRO</span>
+      <button onclick="toggleMobileMenu()" class="header-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="flex flex-col p-6 gap-1">
+      <a href="#products" class="py-3 text-lg font-semibold uppercase tracking-widest" style="border-bottom:1px solid var(--border)" onclick="filterByCategory('all'); toggleMobileMenu()">All Footwear</a>
+      <a href="#products" class="py-3 text-lg font-semibold uppercase tracking-widest" style="border-bottom:1px solid var(--border)" onclick="filterByCategory('new'); toggleMobileMenu()">New Arrivals</a>
+      <a href="#products" class="py-3 text-lg font-semibold uppercase tracking-widest" style="border-bottom:1px solid var(--border)" onclick="filterByCategory('men'); toggleMobileMenu()">Men</a>
+      <a href="#products" class="py-3 text-lg font-semibold uppercase tracking-widest" style="border-bottom:1px solid var(--border)" onclick="filterByCategory('women'); toggleMobileMenu()">Women</a>
+      <a href="#products" class="py-3 text-lg font-semibold uppercase tracking-widest" style="border-bottom:1px solid var(--border)" onclick="filterByCategory('activewear'); toggleMobileMenu()">Activewear</a>
+      <a href="#products" class="py-3 text-lg font-semibold uppercase tracking-widest" style="color:var(--accent); border-bottom:1px solid var(--border)" onclick="filterByCategory('sale'); toggleMobileMenu()">🔥 Super Sale</a>
+    </div>
+    <div class="mt-auto p-6" style="border-top:1px solid var(--border)">
+      <button onclick="toggleTheme(); toggleMobileMenu()" class="w-full py-3 font-semibold uppercase tracking-wider text-sm" style="background:var(--card); border:1px solid var(--border)">Toggle Light/Dark Mode</button>
+    </div>
+  </div>
+
+  <!-- Search Overlay -->
+  <div id="searchOverlay" class="search-overlay">
+    <div class="flex items-center gap-4 p-4 md:p-6" style="border-bottom:1px solid var(--border)">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="searchInput" type="text" placeholder="Search products..." class="flex-1 text-xl bg-transparent border-none outline-none" style="color:var(--text); font-family:'Barlow',sans-serif" oninput="searchProducts(this.value)">
+      <button onclick="closeSearch()" class="header-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div id="searchResults" class="p-4 md:p-6 overflow-y-auto flex-1">
+      <p style="color:var(--muted)" class="text-sm">Start typing to search...</p>
+    </div>
+  </div>
+
+  <!-- Panel Overlay -->
+  <div id="panelOverlay" class="panel-overlay" onclick="closeAllPanels()"></div>
+
+  <!-- Cart Drawer -->
+  <div id="cartDrawer" class="slide-panel from-right">
+    <div class="flex items-center justify-between p-4" style="border-bottom:1px solid var(--border)">
+      <h3 class="font-bold text-lg uppercase tracking-wider">Your Cart</h3>
+      <button onclick="toggleCart()" class="header-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div id="cartItems" class="p-4 flex-1 overflow-y-auto"></div>
+    <div id="cartFooter" class="p-4" style="border-top:1px solid var(--border); display:none;">
+      <div class="flex justify-between mb-4">
+        <span class="font-bold uppercase tracking-wider">Total</span>
+        <span id="cartTotal" class="font-bold text-lg">Rs.0</span>
+      </div>
+      <button onclick="checkout()" class="w-full py-3 font-bold uppercase tracking-widest text-sm" style="background:var(--accent); color:#fff; border:none; cursor:pointer; letter-spacing:0.12em;">Checkout</button>
+    </div>
+  </div>
+
+  <!-- Filter Sidebar -->
+  <div id="filterSidebar" class="slide-panel from-left">
+    <div class="flex items-center justify-between p-4" style="border-bottom:1px solid var(--border)">
+      <h3 class="font-bold text-lg uppercase tracking-wider">Filters</h3>
+      <button onclick="toggleFilter()" class="header-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="p-4">
+      <!-- Category -->
+      <div class="mb-6">
+        <h4 class="font-bold uppercase tracking-wider text-sm mb-3">Category</h4>
+        <label class="flex items-center gap-2 mb-2 cursor-pointer"><input type="checkbox" value="men" class="filter-cat" onchange="applyFilters()"> <span class="text-sm">Men</span></label>
+        <label class="flex items-center gap-2 mb-2 cursor-pointer"><input type="checkbox" value="women" class="filter-cat" onchange="applyFilters()"> <span class="text-sm">Women</span></label>
+        <label class="flex items-center gap-2 mb-2 cursor-pointer"><input type="checkbox" value="activewear" class="filter-cat" onchange="applyFilters()"> <span class="text-sm">Activewear</span></label>
+        <label class="flex items-center gap-2 mb-2 cursor-pointer"><input type="checkbox" value="padel" class="filter-cat" onchange="applyFilters()"> <span class="text-sm">Padel Club</span></label>
+      </div>
+      <!-- Price Range -->
+      <div class="mb-6">
+        <h4 class="font-bold uppercase tracking-wider text-sm mb-3">Price Range</h4>
+        <div class="flex gap-2">
+          <input type="number" id="priceMin" placeholder="Min" class="w-full p-2 text-sm" style="background:var(--input-bg); border:1px solid var(--border); color:var(--text)" oninput="applyFilters()">
+          <input type="number" id="priceMax" placeholder="Max" class="w-full p-2 text-sm" style="background:var(--input-bg); border:1px solid var(--border); color:var(--text)" oninput="applyFilters()">
+        </div>
+      </div>
+      <!-- Size -->
+      <div class="mb-6">
+        <h4 class="font-bold uppercase tracking-wider text-sm mb-3">Size</h4>
+        <div class="flex flex-wrap gap-2">
+          <button class="size-btn filter-size" onclick="this.classList.toggle('active'); if(this.classList.contains('active')){this.style.background='var(--accent)';this.style.color='#fff';this.style.borderColor='var(--accent)'}else{this.style.background='var(--bg)';this.style.color='var(--text)';this.style.borderColor='var(--border)'}; applyFilters()" data-size="38">38</button>
+          <button class="size-btn filter-size" onclick="this.classList.toggle('active'); if(this.classList.contains('active')){this.style.background='var(--accent)';this.style.color='#fff';this.style.borderColor='var(--accent)'}else{this.style.background='var(--bg)';this.style.color='var(--text)';this.style.borderColor='var(--border)'}; applyFilters()" data-size="39">39</button>
+          <button class="size-btn filter-size" onclick="this.classList.toggle('active'); if(this.classList.contains('active')){this.style.background='var(--accent)';this.style.color='#fff';this.style.borderColor='var(--accent)'}else{this.style.background='var(--bg)';this.style.color='var(--text)';this.style.borderColor='var(--border)'}; applyFilters()" data-size="40">40</button>
+          <button class="size-btn filter-size" onclick="this.classList.toggle('active'); if(this.classList.contains('active')){this.style.background='var(--accent)';this.style.color='#fff';this.style.borderColor='var(--accent)'}else{this.style.background='var(--bg)';this.style.color='var(--text)';this.style.borderColor='var(--border)'}; applyFilters()" data-size="41">41</button>
+          <button class="size-btn filter-size" onclick="this.classList.toggle('active'); if(this.classList.contains('active')){this.style.background='var(--accent)';this.style.color='#fff';this.style.borderColor='var(--accent)'}else{this.style.background='var(--bg)';this.style.color='var(--text)';this.style.borderColor='var(--border)'}; applyFilters()" data-size="42">42</button>
+          <button class="size-btn filter-size" onclick="this.classList.toggle('active'); if(this.classList.contains('active')){this.style.background='var(--accent)';this.style.color='#fff';this.style.borderColor='var(--accent)'}else{this.style.background='var(--bg)';this.style.color='var(--text)';this.style.borderColor='var(--border)'}; applyFilters()" data-size="43">43</button>
+          <button class="size-btn filter-size" onclick="this.classList.toggle('active'); if(this.classList.contains('active')){this.style.background='var(--accent)';this.style.color='#fff';this.style.borderColor='var(--accent)'}else{this.style.background='var(--bg)';this.style.color='var(--text)';this.style.borderColor='var(--border)'}; applyFilters()" data-size="44">44</button>
+          <button class="size-btn filter-size" onclick="this.classList.toggle('active'); if(this.classList.contains('active')){this.style.background='var(--accent)';this.style.color='#fff';this.style.borderColor='var(--accent)'}else{this.style.background='var(--bg)';this.style.color='var(--text)';this.style.borderColor='var(--border)'}; applyFilters()" data-size="45">45</button>
+        </div>
+      </div>
+      <!-- Actions -->
+      <div class="flex gap-2 mt-6">
+        <button onclick="clearFilters()" class="flex-1 py-3 font-bold uppercase tracking-wider text-sm" style="background:var(--card); border:1px solid var(--border); color:var(--text); cursor:pointer;">Clear All</button>
+        <button onclick="toggleFilter()" class="flex-1 py-3 font-bold uppercase tracking-wider text-sm" style="background:var(--accent); border:none; color:#fff; cursor:pointer;">Apply</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1 class="golden-text font-playfair text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black mb-4" style="line-height:1;">BELVARRO</h1>
+      <p class="text-lg sm:text-xl md:text-2xl font-light tracking-widest uppercase mb-8" style="color:rgba(255,255,255,0.7)">Premium Athletic & Lifestyle Footwear</p>
+      <a href="#products" class="inline-block px-10 py-4 font-bold uppercase tracking-widest text-sm transition-all" style="background:transparent; color:#FCF6BA; border:2px solid #BF953F; letter-spacing:0.15em;" onmouseover="this.style.background='#BF953F'; this.style.color='#000'" onmouseout="this.style.background='transparent'; this.style.color='#FCF6BA'">Shop Collection</a>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <div>
+    <!-- Breadcrumb -->
+    <div class="max-w-screen-2xl mx-auto px-4 md:px-6 py-3" style="border-bottom:1px solid var(--border)">
+      <nav class="flex items-center gap-2 text-xs" style="color:var(--muted); letter-spacing:0.03em;">
+        <a href="#" class="hover:opacity-70 transition-opacity uppercase font-medium">Home</a>
+        <span>›</span>
+        <span class="uppercase font-medium">All Footwear</span>
+      </nav>
+    </div>
+
+    <!-- Page Title -->
+    <div id="products" class="max-w-screen-2xl mx-auto px-4 md:px-6 pt-8 pb-6 text-center">
+      <h2 class="text-2xl md:text-3xl font-bold uppercase tracking-widest">All Footwear</h2>
+    </div>
+
+    <!-- Sort & Filter Bar -->
+    <div class="max-w-screen-2xl mx-auto px-4 md:px-6 pb-5">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <p class="text-sm" style="color:var(--muted)" id="productCount">12 Products</p>
+        <div class="flex items-center gap-3 w-full sm:w-auto">
+          <div class="relative flex-1 sm:flex-none">
+            <select id="sortSelect" class="sort-select w-full sm:w-auto flex items-center gap-2 pl-4 pr-10 py-3 text-sm font-semibold uppercase tracking-wider cursor-pointer" style="background:var(--card); color:var(--text); border:1px solid var(--border); font-family:'Barlow',sans-serif; letter-spacing:0.06em; min-width:160px; font-size:0.8rem;" onchange="sortProducts(this.value)">
+              <option value="featured">Featured</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+              <option value="newest">Newest</option>
+              <option value="best-selling">Best Selling</option>
+            </select>
+            <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <button class="flex items-center gap-2 px-5 py-3 transition-colors" style="background:var(--card); color:var(--text); border:1px solid var(--border); font-family:'Barlow',sans-serif; font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; cursor:pointer;" onclick="toggleFilter()" onmouseover="this.style.background='var(--border)'" onmouseout="this.style.background='var(--card)'">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square">
+              <line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="12" y1="18" x2="12" y2="18"/>
+            </svg>
+            Filter
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="max-w-screen-2xl mx-auto px-4 md:px-6 pb-16">
+      <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
+
+        <!-- Product 1 -->
+        <div class="product-card cursor-pointer group fade-in" data-name="Olive Ultrex 360" data-price="9799.30" data-orig-price="13999" data-category="men,activewear,sale" data-sizes="39,40,41,42,43,44" data-color="olive" data-reviews="1" data-order="1">
+          <div class="card-img-wrap">
+            <span class="badge-sale">Flat 30% off</span>
+            <img class="img-main" src="https://onedegree.com.pk/cdn/shop/files/001_0000_009593984-010-43_up_jpg_3.jpg?v=1773401672&width=640" alt="Olive Ultrex 360" loading="lazy">
+            <img class="img-hover" src="https://onedegree.com.pk/cdn/shop/files/001_0002_009593981-483-43_up_jpg_1.jpg?v=1773831684&width=640" alt="Olive Ultrex 360 alternate" loading="lazy">
+            <div class="size-selector" id="sizes-0"></div>
+            <button class="quick-add-btn" onclick="event.stopPropagation(); showSizeSelector(0)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Quick Add
+            </button>
+          </div>
+          <div class="p-3">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="swatch" style="width:16px;height:16px;background:#6B7B3A;border:2px solid var(--border);display:inline-block"></span>
+            </div>
+            <p class="font-semibold text-sm mb-1">Olive Ultrex 360</p>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="price-sale font-bold">Rs.9,799.30</span>
+              <span class="price-orig text-sm">Rs.13,999.00</span>
+            </div>
+            <div class="flex items-center gap-1 mt-1">
+              <span class="stars">★★★★½</span>
+              <span class="text-xs" style="color:var(--muted)">(1)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 2 -->
+        <div class="product-card cursor-pointer group fade-in" data-name="Grey Zoom Flex" data-price="8399.30" data-orig-price="11999" data-category="men,activewear,sale" data-sizes="38,39,40,41,42,43" data-color="grey" data-reviews="0" data-order="2">
+          <div class="card-img-wrap">
+            <span class="badge-sale">Flat 30% off</span>
+            <img class="img-main" src="https://onedegree.com.pk/cdn/shop/files/P250407150056_Side_jpg_3.jpg?v=1757506514&width=640" alt="Grey Zoom Flex" loading="lazy">
+            <img class="img-hover" src="https://onedegree.com.pk/cdn/shop/files/001copy_0001_04_0005_009593650-483-42_Top_jpg_1_0005_009593652-479-42_up_jpg_1_0003_009593654-483-42_up_jpg_4.jpg?v=1760937698&width=640" alt="Grey Zoom Flex alternate" loading="lazy">
+            <div class="size-selector" id="sizes-1"></div>
+            <button class="quick-add-btn" onclick="event.stopPropagation(); showSizeSelector(1)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Quick Add
+            </button>
+          </div>
+          <div class="p-3">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="swatch" style="width:16px;height:16px;background:#9CA3AF;border:2px solid var(--border);display:inline-block"></span>
+            </div>
+            <p class="font-semibold text-sm mb-1">Grey Zoom Flex</p>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="price-sale font-bold">Rs.8,399.30</span>
+              <span class="price-orig text-sm">Rs.11,999.00</span>
+            </div>
+            <div class="flex items-center gap-1 mt-1">
+              <span class="stars">★★★★★</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 3 -->
+        <div class="product-card cursor-pointer group fade-in" data-name="Grey Ridge" data-price="5599.30" data-orig-price="7999" data-category="men,sale" data-sizes="40,41,42,43,44,45" data-color="grey" data-reviews="1" data-order="3">
+          <div class="card-img-wrap">
+            <span class="badge-sale">Flat 30% off</span>
+            <img class="img-main" src="https://onedegree.com.pk/cdn/shop/files/001_0002_009593981-483-43_up_jpg_1.jpg?v=1773831684&width=640" alt="Grey Ridge" loading="lazy">
+            <img class="img-hover" src="https://onedegree.com.pk/cdn/shop/files/001_0000_009593984-010-43_up_jpg_3.jpg?v=1773401672&width=640" alt="Grey Ridge alternate" loading="lazy">
+            <div class="size-selector" id="sizes-2"></div>
+            <button class="quick-add-btn" onclick="event.stopPropagation(); showSizeSelector(2)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Quick Add
+            </button>
+          </div>
+          <div class="p-3">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="swatch" style="width:16px;height:16px;background:#9CA3AF;border:2px solid var(--border);display:inline-block"></span>
+            </div>
+            <p class="font-semibold text-sm mb-1">Grey Ridge</p>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="price-sale font-bold">Rs.5,599.30</span>
+              <span class="price-orig text-sm">Rs.7,999.00</span>
+            </div>
+            <div class="flex items-center gap-1 mt-1">
+              <span class="stars">★★★★★</span>
+              <span class="text-xs" style="color:var(--muted)">(1)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 4 -->
+        <div class="product-card cursor-pointer group fade-in" data-name="Navy & White Swap" data-price="8399.30" data-orig-price="11999" data-category="men,women,sale" data-sizes="38,39,40,41,42,43" data-color="navy" data-reviews="0" data-order="4">
+          <div class="card-img-wrap">
+            <span class="badge-sale">Flat 30% off</span>
+            <img class="img-main" src="https://onedegree.com.pk/cdn/shop/files/001copy_0001_04_0010_009593651-011-42_up_jpg_1_0002_WhatsAppImage2025-10-08at3_0001_DSC05954_0001_009593915-011-41.jpg?v=1765948976&width=640" alt="Navy & White Swap" loading="lazy">
+            <img class="img-hover" src="https://onedegree.com.pk/cdn/shop/files/001copy_0001_04_0005_009593650-483-42_Top_jpg_1_0005_009593652-479-42_up_jpg_1_0006_009593653-488-42_up_jpg_4_0019_0095.jpg?v=1770032793&width=640" alt="Navy & White Swap alternate" loading="lazy">
+            <div class="size-selector" id="sizes-3"></div>
+            <button class="quick-add-btn" onclick="event.stopPropagation(); showSizeSelector(3)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Quick Add
+            </button>
+          </div>
+          <div class="p-3">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="swatch" style="width:16px;height:16px;background:#1E3A5F;border:2px solid var(--border);display:inline-block"></span>
+            </div>
+            <p class="font-semibold text-sm mb-1">Navy & White Swap</p>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="price-sale font-bold">Rs.8,399.30</span>
+              <span class="price-orig text-sm">Rs.11,999.00</span>
+            </div>
+            <div class="flex items-center gap-1 mt-1">
+              <span class="stars">★★★★★</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 5 -->
+        <div class="product-card cursor-pointer group fade-in" data-name="White Gravity Force" data-price="7699.30" data-orig-price="10999" data-category="men,women,activewear,sale" data-sizes="39,40,41,42,43,44" data-color="white" data-reviews="3" data-order="5">
+          <div class="card-img-wrap">
+            <span class="badge-sale">Flat 30% off</span>
+            <img class="img-main" src="https://onedegree.com.pk/cdn/shop/files/001copy_0001_04_0005_009593650-483-42_Top_jpg_1_0005_009593652-479-42_up_jpg_1_0006_009593653-488-42_up_jpg_4_0019_0095.jpg?v=1770032793&width=640" alt="White Gravity Force" loading="lazy">
+            <img class="img-hover" src="https://onedegree.com.pk/cdn/shop/files/001copy_0001_04_0005_009593650-483-42_Top_jpg_1_0005_009593652-479-42_up_jpg_1_0004_009593654-483-42_up_jpg_1.jpg?v=1760937698&width=640" alt="White Gravity Force alternate" loading="lazy">
+            <div class="size-selector" id="sizes-4"></div>
+            <button class="quick-add-btn" onclick="event.stopPropagation(); showSizeSelector(4)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Quick Add
+            </button>
+          </div>
+          <div class="p-3">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="swatch" style="width:16px;height:16px;background:#F5F5F5;border:2px solid var(--border);display:inline-block"></span>
+              <span class="swatch" style="width:16px;height:16px;background:#9CA3AF;border:2px solid var(--border);display:inline-block"></span>
+            </div>
+            <p class="font-semibold text-sm mb-1">White Gravity Force</p>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="price-sale font-bold">Rs.7,699.30</span>
+              <span class="price-orig text-sm">Rs.10,999.00</span>
+            </div>
+            <div class="flex items-center gap-1 mt-1">
+              <span class="stars">★★★★★</span>
+              <span class="text-xs" style="color:var(--muted)">(3)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 6 -->
+        <div class="product-card cursor-pointer group fade-in" data-name="Grey Vortex" data-price="8399.30" data-orig-price="11999" data-category="men,activewear,sale" data-sizes="40,41,42,43,44" data-color="grey" data-reviews="5" data-order="6">
+          <div class="card-img-wrap">
+            <span class="badge-sale">Flat 30% off</span>
+            <img class="img-main" src="https://onedegree.com.pk/cdn/shop/files/001copy_0001_04_0005_009593650-483-42_Top_jpg_1_0005_009593652-479-42_up_jpg_1_0003_009593654-483-42_up_jpg_4.jpg?v=1760937698&width=640" alt="Grey Vortex" loading="lazy">
+            <img class="img-hover" src="https://onedegree.com.pk/cdn/shop/files/001copy_0001_04_0005_009593650-483-42_Top_jpg_1_0005_009593652-479-42_up_jpg_1_0004_009593654-483-42_up_jpg_1.jpg?v=1760937698&width=640" alt="Grey Vortex alternate" loading="lazy">
+            <div class="size-selector" id="sizes-5"></div>
+            <button class="quick-add-btn" onclick="event.stopPropagation(); showSizeSelector(5)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Quick Add
+            </button>
+          </div>
+          <div class="p-3">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="swatch" style="width:16px;height:16px;background:#9CA3AF;border:2px solid var(--border);display:inline-block"></span>
+              <span class="swatch" style="width:16px;height:16px;background:#4B5563;border:2px solid var(--border);display:inline-block"></span>
+            </div>
+            <p class="font-semibold text-sm mb-1">Grey Vortex</p>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="price-sale font-bold">Rs.8,399.30</span>
+              <span class="price-orig text-sm">Rs.11,999.00</span>
+            </div>
+            <div class="flex items-center gap-1 mt-1">
+              <span class="stars">★★★★★</span>
+              <span class="text-xs" style="color:var(--muted)">(5)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 7 -->
+        <div class="product-card cursor-pointer group fade-in" data-name="Grey Evolve Gym Sneaker 2.0" data-price="9799.30" data-orig-price="13999" data-category="men,activewear,sale" data-sizes="39,40,41,42,43,44,45" data-color="grey" data-reviews="8" data-order="7">
+          <div class="card-img-wrap">
+            <span class="badge-sale">Flat 30% off</span>
+            <img class="img-main" src="https://onedegree.com.pk/cdn/shop/files/01_a9492880-299e-466a-a6e5-53e6fa20ff0a.jpg?v=1757506514&width=600" alt="Grey Evolve Gym Sneaker 2.0" loading="lazy">
+            <img class="img-hover" src="https://onedegree.com.pk/cdn/shop/files/P250407150056_Side_jpg_3.jpg?v=1757506514&width=640" alt="Grey Evolve alternate" loading="lazy">
+            <div class="size-selector" id="sizes-6"></div>
+            <button class="quick-add-btn" onclick="event.stopPropagation(); showSizeSelector(6)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Quick Add
+            </button>
+          </div>
+          <div class="p-3">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="swatch" style="width:16px;height:16px;background:#9CA3AF;border:2px solid var(--border);display:inline-block"></span>
+              <span class="swatch" style="width:16px;height:16px;background:#4B5563;border:2px solid var(--border);display:inline-block"></span>
+            </div>
+            <p class="font-semibold text-sm mb-1">Grey Evolve Gym Sneaker 2.0</p>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="price-sale font-bold">Rs.9,799.30</span>
+              <span class="price-orig text-sm">Rs.13,999.00</span>
+            </div>
+            <div class="flex items-center gap-1 mt-1">
+              <span class="stars">★★★★★</span>
+              <span class="text-xs" style="color:var(--muted)">(8)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 8 -->
+        <div class="product-card cursor-pointer group fade-in" data-name="Beige Ultrex 360" data-price="13999" data-orig-price="13999" data-category="men,women,new" data-sizes="38,39,40,41,42,43,44" data-color="beige" data-reviews="2" data-order="8">
+          <div class="card-img-wrap">
+            <span class="badge-sale badge-new">New In</span>
+            <img class="img-main" src="https://onedegree.com.pk/cdn/shop/files/001_0000_009593984-010-43_up_jpg_3.jpg?v=1773401672&width=640" alt="Beige Ultrex 360" loading="lazy">
+            <img class="img-hover" src="https://onedegree.com.pk/cdn/shop/files/001_0002_009593981-483-43_up_jpg_1.jpg?v=1773831684&width=640" alt="Beige Ultrex 360 alternate" loading="lazy">
+            <div class="size-selector" id="sizes-7"></div>
+            <button class="quick-add-btn" onclick="event.stopPropagation(); showSizeSelector(7)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Quick Add
+            </button>
+          </div>
+          <div class="p-3">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="swatch" style="width:16px;height:16px;background:#D4C5A9;border:2px solid var(--border);display:inline-block"></span>
+              <span class="swatch" style="width:16px;height:16px;background:#6B7B3A;border:2px solid var(--border);display:inline-block"></span>
+            </div>
+            <p class="font-semibold text-sm mb-1">Beige Ultrex 360</p>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="font-bold">Rs.13,999.00</span>
+            </div>
+            <div class="flex items-center gap-1 mt-1">
+              <span class="stars">★★★★★</span>
+              <span class="text-xs" style="color:var(--muted)">(2)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 9 -->
+        <div class="product-card cursor-pointer group fade-in" data-name="Black Ridge Runner" data-price="6299.30" data-orig-price="8999" data-category="men,activewear,sale" data-sizes="40,41,42,43,44,45" data-color="black" data-reviews="12" data-order="9">
+          <div class="card-img-wrap">
+            <span class="badge-sale">Flat 30% off</span>
+            <img class="img-main" src="https://onedegree.com.pk/cdn/shop/files/001copy_0001_04_0010_009593651-011-42_up_jpg_1_0002_WhatsAppImage2025-10-08at3_0001_DSC05954_0001_009593915-011-41.jpg?v=1765948976&width=640" alt="Black Ridge Runner" loading="lazy">
+            <img class="img-hover" src="https://onedegree.com.pk/cdn/shop/files/001_0002_009593981-483-43_up_jpg_1.jpg?v=1773831684&width=640" alt="Black Ridge Runner alternate" loading="lazy">
+            <div class="size-selector" id="sizes-8"></div>
+            <button class="quick-add-btn" onclick="event.stopPropagation(); showSizeSelector(8)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Quick Add
+            </button>
+          </div>
+          <div class="p-3">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="swatch" style="width:16px;height:16px;background:#1a1a1a;border:2px solid var(--border);display:inline-block"></span>
+              <span class="swatch" style="width:16px;height:16px;background:#4B5563;border:2px solid var(--border);display:inline-block"></span>
+            </div>
+            <p class="font-semibold text-sm mb-1">Black Ridge Runner</p>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="price-sale font-bold">Rs.6,299.30</span>
+              <span class="price-orig text-sm">Rs.8,999.00</span>
+            </div>
+            <div class="flex items-center gap-1 mt-1">
+              <span class="stars">★★★★★</span>
+              <span class="text-xs" style="color:var(--muted)">(12)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 10 -->
+        <div class="product-card cursor-pointer group fade-in" data-name="White Force Pro" data-price="7699.30" data-orig-price="10999" data-category="women,activewear,sale" data-sizes="38,39,40,41,42" data-color="white" data-reviews="7" data-order="10">
+          <div class="card-img-wrap">
+            <span class="badge-sale">Flat 30% off</span>
+            <img class="img-main" src="https://onedegree.com.pk/cdn/shop/files/001copy_0001_04_0005_009593650-483-42_Top_jpg_1_0005_009593652-479-42_up_jpg_1_0006_009593653-488-42_up_jpg_4_0019_0095.jpg?v=1770032793&width=640" alt="White Force Pro" loading="lazy">
+            <img class="img-hover" src="https://onedegree.com.pk/cdn/shop/files/P250407150056_Side_jpg_3.jpg?v=1757506514&width=640" alt="White Force Pro alternate" loading="lazy">
+            <div class="size-selector" id="sizes-9"></div>
+            <button class="quick-add-btn" onclick="event.stopPropagation(); showSizeSelector(9)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Quick Add
+            </button>
+          </div>
+          <div class="p-3">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="swatch" style="width:16px;height:16px;background:#F5F5F5;border:2px solid var(--border);display:inline-block"></span>
+              <span class="swatch" style="width:16px;height:16px;background:#1E3A5F;border:2px solid var(--border);display:inline-block"></span>
+            </div>
+            <p class="font-semibold text-sm mb-1">White Force Pro</p>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="price-sale font-bold">Rs.7,699.30</span>
+              <span class="price-orig text-sm">Rs.10,999.00</span>
+            </div>
+            <div class="flex items-center gap-1 mt-1">
+              <span class="stars">★★★★★</span>
+              <span class="text-xs" style="color:var(--muted)">(7)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 11 -->
+        <div class="product-card cursor-pointer group fade-in" data-name="Charcoal Vortex Elite" data-price="9099.30" data-orig-price="12999" data-category="men,sale" data-sizes="41,42,43,44,45" data-color="charcoal" data-reviews="4" data-order="11">
+          <div class="card-img-wrap">
+            <span class="badge-sale">Flat 30% off</span>
+            <img class="img-main" src="https://onedegree.com.pk/cdn/shop/files/001copy_0001_04_0005_009593650-483-42_Top_jpg_1_0005_009593652-479-42_up_jpg_1_0003_009593654-483-42_up_jpg_4.jpg?v=1760937698&width=640" alt="Charcoal Vortex Elite" loading="lazy">
+            <img class="img-hover" src="https://onedegree.com.pk/cdn/shop/files/001_0000_009593984-010-43_up_jpg_3.jpg?v=1773401672&width=640" alt="Charcoal Vortex Elite alternate" loading="lazy">
+            <div class="size-selector" id="sizes-10"></div>
+            <button class="quick-add-btn" onclick="event.stopPropagation(); showSizeSelector(10)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Quick Add
+            </button>
+          </div>
+          <div class="p-3">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="swatch" style="width:16px;height:16px;background:#374151;border:2px solid var(--border);display:inline-block"></span>
+            </div>
+            <p class="font-semibold text-sm mb-1">Charcoal Vortex Elite</p>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="price-sale font-bold">Rs.9,099.30</span>
+              <span class="price-orig text-sm">Rs.12,999.00</span>
+            </div>
+            <div class="flex items-center gap-1 mt-1">
+              <span class="stars">★★★★★</span>
+              <span class="text-xs" style="color:var(--muted)">(4)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 12 -->
+        <div class="product-card cursor-pointer group fade-in" data-name="Stone Evolve Padel" data-price="13999" data-orig-price="13999" data-category="men,women,padel,new" data-sizes="38,39,40,41,42,43,44,45" data-color="stone" data-reviews="6" data-order="12">
+          <div class="card-img-wrap">
+            <span class="badge-sale badge-new">New In</span>
+            <img class="img-main" src="https://onedegree.com.pk/cdn/shop/files/01_a9492880-299e-466a-a6e5-53e6fa20ff0a.jpg?v=1757506514&width=600" alt="Stone Evolve Padel" loading="lazy">
+            <img class="img-hover" src="https://onedegree.com.pk/cdn/shop/files/001copy_0001_04_0010_009593651-011-42_up_jpg_1_0002_WhatsAppImage2025-10-08at3_0001_DSC05954_0001_009593915-011-41.jpg?v=1765948976&width=640" alt="Stone Evolve Padel alternate" loading="lazy">
+            <div class="size-selector" id="sizes-11"></div>
+            <button class="quick-add-btn" onclick="event.stopPropagation(); showSizeSelector(11)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Quick Add
+            </button>
+          </div>
+          <div class="p-3">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="swatch" style="width:16px;height:16px;background:#A8A29E;border:2px solid var(--border);display:inline-block"></span>
+              <span class="swatch" style="width:16px;height:16px;background:#1a1a1a;border:2px solid var(--border);display:inline-block"></span>
+              <span class="swatch" style="width:16px;height:16px;background:#F5F5F5;border:2px solid var(--border);display:inline-block"></span>
+            </div>
+            <p class="font-semibold text-sm mb-1">Stone Evolve Padel</p>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="font-bold">Rs.13,999.00</span>
+            </div>
+            <div class="flex items-center gap-1 mt-1">
+              <span class="stars">★★★★★</span>
+              <span class="text-xs" style="color:var(--muted)">(6)</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Load More -->
+      <div class="flex justify-center mt-10" id="loadMoreWrap">
+        <button id="loadMoreBtn" class="px-10 md:px-12 py-4 font-barlow font-bold uppercase tracking-widest text-sm transition-colors" style="background:var(--card); color:var(--text); border:1px solid var(--border); letter-spacing:0.12em; cursor:pointer;" onclick="loadMore()" onmouseover="this.style.background='var(--border)'" onmouseout="this.style.background='var(--card)'">
+          Load More
+        </button>
+      </div>
+    </div>
+
+    <!-- Newsletter -->
+    <section class="py-16 px-4" style="background:var(--surface); border-top:1px solid var(--border); border-bottom:1px solid var(--border)">
+      <div class="max-w-xl mx-auto text-center">
+        <h3 class="golden-text font-playfair text-3xl md:text-4xl font-bold mb-3">Stay in the Loop</h3>
+        <p class="mb-6" style="color:var(--muted)">Subscribe for exclusive drops, early access, and member-only deals.</p>
+        <div class="flex flex-col sm:flex-row gap-3">
+          <input type="email" id="newsletterEmail" placeholder="Enter your email" class="flex-1 px-4 py-3 text-sm" style="background:var(--bg); border:1px solid var(--border); color:var(--text); font-family:'Barlow',sans-serif;">
+          <button onclick="subscribeNewsletter()" class="px-8 py-3 font-bold uppercase tracking-widest text-sm" style="background:var(--accent); color:#fff; border:none; cursor:pointer; letter-spacing:0.1em;">Subscribe</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="background:var(--footer-bg); border-top:1px solid var(--border);">
+      <div class="max-w-screen-2xl mx-auto px-4 md:px-6 py-10">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div>
+            <div class="flex items-center gap-2 mb-4">
+              <svg width="36" height="20" viewBox="0 0 52 28" fill="none">
+                <path d="M0 28 L20 0 L28 8 L14 28 Z" fill="currentColor"/>
+                <path d="M18 28 L36 4 L52 4 L34 28 Z" fill="currentColor" opacity="0.6"/>
+              </svg>
+              <span class="font-bold tracking-widest">BELVARRO</span>
+            </div>
+            <p class="text-sm" style="color:var(--muted)">Premium athletic and lifestyle footwear. Built to perform.</p>
+          </div>
+          <div>
+            <p class="font-bold uppercase tracking-wider text-sm mb-3">Explore</p>
+            <div class="flex flex-col gap-2">
+              <a href="#" class="text-sm transition-colors" style="color:var(--muted)">New Arrivals</a>
+              <a href="#" class="text-sm transition-colors" style="color:var(--muted)">Men</a>
+              <a href="#" class="text-sm transition-colors" style="color:var(--muted)">Women</a>
+              <a href="#" class="text-sm transition-colors" style="color:var(--muted)">Activewear</a>
+              <a href="#" class="text-sm transition-colors" style="color:var(--muted)">Padel Club</a>
+            </div>
+          </div>
+          <div>
+            <p class="font-bold uppercase tracking-wider text-sm mb-3">Support</p>
+            <div class="flex flex-col gap-2">
+              <a href="#" class="text-sm transition-colors" style="color:var(--muted)">Size Guide</a>
+              <a href="#" class="text-sm transition-colors" style="color:var(--muted)">Returns & Exchanges</a>
+              <a href="#" class="text-sm transition-colors" style="color:var(--muted)">Track Order</a>
+              <a href="#" class="text-sm transition-colors" style="color:var(--muted)">Contact Us</a>
+            </div>
+          </div>
+          <div>
+            <p class="font-bold uppercase tracking-wider text-sm mb-3">Shipping</p>
+            <div>
+              <p class="text-sm font-semibold mb-1">Free Shipping</p>
+              <p class="text-sm" style="color:var(--muted)">On all orders above Rs.5,000 nationwide</p>
+            </div>
+          </div>
+        </div>
+        <div class="mt-8 pt-6 flex flex-col sm:flex-row justify-between items-center gap-2" style="border-top:1px solid var(--border)">
+          <p class="text-xs" style="color:var(--muted)">&copy; 2026 Belvarro. All rights reserved.</p>
+          <p class="text-xs" style="color:var(--muted)">Made in Pakistan 🇵🇰</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Back to Top -->
+  <button id="backToTop" class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Product Detail Modal -->
+  <div id="productModal" class="product-modal" onclick="if(event.target===this)closeProductModal()">
+    <div class="product-modal-content">
+      <div id="modalImage" style="background:#e8e8e8; min-height:300px;"></div>
+      <div class="p-6 flex flex-col">
+        <button onclick="closeProductModal()" class="self-end header-icon mb-2">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+        <span id="modalBadge" class="inline-block text-xs font-bold uppercase tracking-wider px-2 py-1 mb-3 self-start" style="background:var(--accent);color:#fff"></span>
+        <h2 id="modalName" class="text-2xl font-bold mb-2"></h2>
+        <div id="modalPrice" class="flex items-center gap-3 mb-3"></div>
+        <div id="modalStars" class="flex items-center gap-1 mb-4"></div>
+        <p id="modalDesc" class="text-sm mb-5" style="color:var(--muted)"></p>
+        <p class="text-sm font-bold uppercase tracking-wider mb-2">Select Size</p>
+        <div id="modalSizes" class="flex flex-wrap gap-2 mb-6"></div>
+        <button id="modalAddToCartBtn" onclick="modalAddToCart()" class="w-full py-3 font-bold uppercase tracking-widest text-sm" style="background:var(--accent); color:#fff; border:none; cursor:pointer; letter-spacing:0.12em;">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Checkout Modal -->
+  <div id="checkoutModal" class="checkout-modal" onclick="if(event.target===this)closeCheckoutModal()">
+    <div class="checkout-modal-content">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="text-xl font-bold uppercase tracking-wider">Checkout via WhatsApp</h3>
+        <button onclick="closeCheckoutModal()" class="header-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-bold uppercase tracking-wider mb-1">Full Name *</label>
+        <input type="text" id="custName" placeholder="Your full name" class="w-full p-3 text-sm" style="background:var(--input-bg); border:1px solid var(--border); color:var(--text); font-family:'Barlow',sans-serif;">
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-bold uppercase tracking-wider mb-1">Phone Number *</label>
+        <input type="tel" id="custPhone" placeholder="03XX-XXXXXXX" class="w-full p-3 text-sm" style="background:var(--input-bg); border:1px solid var(--border); color:var(--text); font-family:'Barlow',sans-serif;">
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-bold uppercase tracking-wider mb-1">Delivery Address *</label>
+        <textarea id="custAddress" rows="3" placeholder="Full delivery address with city" class="w-full p-3 text-sm" style="background:var(--input-bg); border:1px solid var(--border); color:var(--text); font-family:'Barlow',sans-serif; resize:vertical;"></textarea>
+      </div>
+      <div class="mb-4 p-3" style="background:var(--surface); border:1px solid var(--border)">
+        <p class="text-sm font-bold uppercase tracking-wider mb-2">Order Summary</p>
+        <div id="checkoutSummary"></div>
+        <div class="flex justify-between mt-3 pt-3" style="border-top:1px solid var(--border)">
+          <span class="font-bold">Total</span>
+          <span id="checkoutTotal" class="font-bold" style="color:var(--accent)"></span>
+        </div>
+      </div>
+      <button onclick="sendToWhatsApp()" class="w-full py-4 font-bold uppercase tracking-widest text-sm flex items-center justify-center gap-2" style="background:#25D366; color:#fff; border:none; cursor:pointer; letter-spacing:0.1em;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Send Order via WhatsApp
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // ==================== THEME ====================
+    function initTheme() {
+      const saved = localStorage.getItem('belvarro-theme');
+      if (saved === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      updateThemeIcons();
+    }
+
+    function toggleTheme() {
+      document.documentElement.classList.toggle('dark');
+      const isDark = document.documentElement.classList.contains('dark');
+      localStorage.setItem('belvarro-theme', isDark ? 'dark' : 'light');
+      updateThemeIcons();
+    }
+
+    function updateThemeIcons() {
+      const isDark = document.documentElement.classList.contains('dark');
+      document.getElementById('sunIcon').style.display = isDark ? 'block' : 'none';
+      document.getElementById('moonIcon').style.display = isDark ? 'none' : 'block';
+    }
+
+    // ==================== CART ====================
+    let cart = JSON.parse(localStorage.getItem('belvarro-cart') || '[]');
+
+    function updateCartBadge() {
+      const badge = document.getElementById('cartBadge');
+      const total = cart.reduce((sum, item) => sum + item.qty, 0);
+      badge.textContent = total;
+      badge.style.display = total > 0 ? 'flex' : 'none';
+    }
+
+    function saveCart() {
+      localStorage.setItem('belvarro-cart', JSON.stringify(cart));
+      updateCartBadge();
+      renderCart();
+    }
+
+    function addToCart(name, price, size) {
+      const key = name + '-' + size;
+      const existing = cart.find(i => i.key === key);
+      if (existing) {
+        existing.qty++;
+      } else {
+        cart.push({ key, name, price: parseFloat(price), size, qty: 1 });
+      }
+      saveCart();
+      showToast('Added to cart: ' + name + ' (Size ' + size + ')');
+      closeSizeSelectors();
+    }
+
+    function removeFromCart(key) {
+      cart = cart.filter(i => i.key !== key);
+      saveCart();
+    }
+
+    function updateQty(key, delta) {
+      const item = cart.find(i => i.key === key);
+      if (item) {
+        item.qty += delta;
+        if (item.qty <= 0) cart = cart.filter(i => i.key !== key);
+      }
+      saveCart();
+    }
+
+    function renderCart() {
+      const container = document.getElementById('cartItems');
+      const footer = document.getElementById('cartFooter');
+      if (cart.length === 0) {
+        container.innerHTML = '<div class="flex flex-col items-center justify-center h-64"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="color:var(--muted)"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><p class="mt-4 text-sm" style="color:var(--muted)">Your cart is empty</p></div>';
+        footer.style.display = 'none';
+        return;
+      }
+      footer.style.display = 'block';
+      let html = '';
+      let total = 0;
+      cart.forEach(item => {
+        total += item.price * item.qty;
+        html += `<div class="flex items-center gap-3 py-3" style="border-bottom:1px solid var(--border)">
+          <div class="flex-1">
+            <p class="font-semibold text-sm">${item.name}</p>
+            <p class="text-xs" style="color:var(--muted)">Size: ${item.size}</p>
+            <p class="text-sm font-bold mt-1" style="color:var(--accent)">Rs.${item.price.toLocaleString()}</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="updateQty('${item.key}', -1)" class="w-7 h-7 flex items-center justify-center text-sm font-bold" style="background:var(--surface); border:1px solid var(--border); cursor:pointer; color:var(--text)">-</button>
+            <span class="text-sm font-bold w-6 text-center">${item.qty}</span>
+            <button onclick="updateQty('${item.key}', 1)" class="w-7 h-7 flex items-center justify-center text-sm font-bold" style="background:var(--surface); border:1px solid var(--border); cursor:pointer; color:var(--text)">+</button>
+          </div>
+          <button onclick="removeFromCart('${item.key}')" class="header-icon" style="color:var(--muted)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>`;
+      });
+      container.innerHTML = html;
+      document.getElementById('cartTotal').textContent = 'Rs.' + total.toLocaleString(undefined, {minimumFractionDigits: 2});
+    }
+
+    function toggleCart() {
+      const drawer = document.getElementById('cartDrawer');
+      const overlay = document.getElementById('panelOverlay');
+      drawer.classList.toggle('open');
+      overlay.classList.toggle('open');
+      renderCart();
+    }
+
+    function checkout() {
+      if (cart.length === 0) return;
+      toggleCart();
+      openCheckoutModal();
+    }
+
+    function openCheckoutModal() {
+      let summaryHtml = '';
+      let total = 0;
+      cart.forEach(item => {
+        const subtotal = item.price * item.qty;
+        total += subtotal;
+        summaryHtml += '<div class="flex justify-between text-sm py-1"><span>' + item.name + ' (Size ' + item.size + ') x' + item.qty + '</span><span>Rs.' + subtotal.toLocaleString() + '</span></div>';
+      });
+      document.getElementById('checkoutSummary').innerHTML = summaryHtml;
+      document.getElementById('checkoutTotal').textContent = 'Rs.' + total.toLocaleString(undefined, {minimumFractionDigits: 2});
+      document.getElementById('checkoutModal').classList.add('open');
+    }
+
+    function closeCheckoutModal() {
+      document.getElementById('checkoutModal').classList.remove('open');
+    }
+
+    function sendToWhatsApp() {
+      const name = document.getElementById('custName').value.trim();
+      const phone = document.getElementById('custPhone').value.trim();
+      const address = document.getElementById('custAddress').value.trim();
+      if (!name || !phone || !address) { showToast('Please fill in all fields'); return; }
+      let msg = '\ud83d\uded2 *NEW ORDER - BELVARRO FOOTWEAR*\n\n';
+      msg += '\ud83d\udc64 *Customer Details:*\n';
+      msg += 'Name: ' + name + '\n';
+      msg += 'Phone: ' + phone + '\n';
+      msg += 'Address: ' + address + '\n\n';
+      msg += '\ud83d\udc5f *Order Details:*\n';
+      let total = 0;
+      cart.forEach(item => {
+        const subtotal = item.price * item.qty;
+        total += subtotal;
+        msg += '\u2022 ' + item.name + ' | Size: ' + item.size + ' | Qty: ' + item.qty + ' | Rs.' + subtotal.toLocaleString() + '\n';
+      });
+      msg += '\n\ud83d\udcb0 *Total Amount: Rs.' + total.toLocaleString(undefined, {minimumFractionDigits: 2}) + '*\n';
+      msg += '\n\ud83d\ude9a *Shipping:* ' + (total >= 5000 ? 'FREE' : 'Standard rates apply') + '\n';
+      msg += '\nThank you for shopping with BELVARRO! \ud83d\ude4f';
+      window.open('https://wa.me/923295540603?text=' + encodeURIComponent(msg), '_blank');
+      cart = [];
+      saveCart();
+      closeCheckoutModal();
+      showToast('Order sent to WhatsApp!');
+    }
+
+    // ==================== SIZE SELECTOR ====================
+    function showSizeSelector(index) {
+      closeSizeSelectors();
+      const card = document.querySelectorAll('.product-card')[index];
+      const sizes = card.dataset.sizes.split(',');
+      const name = card.dataset.name;
+      const price = card.dataset.price;
+      const selector = document.getElementById('sizes-' + index);
+      selector.innerHTML = sizes.map(s => `<button class="size-btn" onclick="event.stopPropagation(); addToCart('${name.replace(/'/g, "\\'") }', '${price}', '${s}')">${s}</button>`).join('');
+      selector.classList.add('open');
+    }
+
+    function closeSizeSelectors() {
+      document.querySelectorAll('.size-selector').forEach(s => { s.classList.remove('open'); s.innerHTML = ''; });
+    }
+
+    // ==================== FILTER ====================
+    function toggleFilter() {
+      document.getElementById('filterSidebar').classList.toggle('open');
+      document.getElementById('panelOverlay').classList.toggle('open');
+    }
+
+    function applyFilters() {
+      const cats = [...document.querySelectorAll('.filter-cat:checked')].map(c => c.value);
+      const sizes = [...document.querySelectorAll('.filter-size.active')].map(s => s.dataset.size);
+      const minPrice = parseFloat(document.getElementById('priceMin').value) || 0;
+      const maxPrice = parseFloat(document.getElementById('priceMax').value) || Infinity;
+
+      const cards = document.querySelectorAll('.product-card');
+      let visible = 0;
+      cards.forEach(card => {
+        const cardCats = card.dataset.category.split(',');
+        const cardSizes = card.dataset.sizes.split(',');
+        const cardPrice = parseFloat(card.dataset.price);
+
+        let show = true;
+        if (cats.length > 0 && !cats.some(c => cardCats.includes(c))) show = false;
+        if (sizes.length > 0 && !sizes.some(s => cardSizes.includes(s))) show = false;
+        if (cardPrice < minPrice || cardPrice > maxPrice) show = false;
+
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      document.getElementById('productCount').textContent = visible + ' Products';
+    }
+
+    function clearFilters() {
+      document.querySelectorAll('.filter-cat').forEach(c => c.checked = false);
+      document.querySelectorAll('.filter-size').forEach(s => {
+        s.classList.remove('active');
+        s.style.background = 'var(--bg)'; s.style.color = 'var(--text)'; s.style.borderColor = 'var(--border)';
+      });
+      document.getElementById('priceMin').value = '';
+      document.getElementById('priceMax').value = '';
+      document.querySelectorAll('.product-card').forEach(c => c.style.display = '');
+      updateProductCount();
+    }
+
+    // ==================== SORT ====================
+    function sortProducts(method) {
+      const grid = document.getElementById('productGrid');
+      const cards = [...grid.querySelectorAll('.product-card')];
+
+      cards.sort((a, b) => {
+        switch (method) {
+          case 'price-low': return parseFloat(a.dataset.price) - parseFloat(b.dataset.price);
+          case 'price-high': return parseFloat(b.dataset.price) - parseFloat(a.dataset.price);
+          case 'newest': return parseInt(b.dataset.order) - parseInt(a.dataset.order);
+          case 'best-selling': return parseInt(b.dataset.reviews) - parseInt(a.dataset.reviews);
+          default: return parseInt(a.dataset.order) - parseInt(b.dataset.order);
+        }
+      });
+
+      cards.forEach(card => grid.appendChild(card));
+    }
+
+    // ==================== SEARCH ====================
+    function openSearch() {
+      document.getElementById('searchOverlay').classList.add('open');
+      document.getElementById('searchInput').focus();
+    }
+
+    function closeSearch() {
+      document.getElementById('searchOverlay').classList.remove('open');
+      document.getElementById('searchInput').value = '';
+      document.querySelectorAll('.product-card').forEach(c => c.style.display = '');
+      initLoadMore();
+    }
+
+    function searchProducts(query) {
+      const q = query.toLowerCase().trim();
+      const cards = document.querySelectorAll('.product-card');
+      let results = [];
+
+      cards.forEach(card => {
+        const name = card.dataset.name.toLowerCase();
+        if (!q) {
+          card.style.display = '';
+        } else if (name.includes(q)) {
+          card.style.display = '';
+          results.push(card.dataset.name);
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      const container = document.getElementById('searchResults');
+      if (!q) {
+        container.innerHTML = '<p style="color:var(--muted)" class="text-sm">Start typing to search...</p>';
+      } else if (results.length === 0) {
+        container.innerHTML = '<p style="color:var(--muted)" class="text-sm">No products found for "' + query + '"</p>';
+      } else {
+        container.innerHTML = '<p class="text-sm mb-2" style="color:var(--muted)">' + results.length + ' result(s) found. Scroll down to see them.</p>';
+      }
+    }
+
+    // ==================== CATEGORY FILTER (NAV) ====================
+    function filterByCategory(cat, el) {
+      document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+      if (el) el.classList.add('active');
+
+      const cards = document.querySelectorAll('.product-card');
+      let visible = 0;
+      cards.forEach(card => {
+        const cats = card.dataset.category.split(',');
+        if (cat === 'all') {
+          card.style.display = '';
+          visible++;
+        } else if (cats.includes(cat)) {
+          card.style.display = '';
+          visible++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+      document.getElementById('productCount').textContent = visible + ' Products';
+      document.getElementById('loadMoreWrap').style.display = 'none';
+    }
+
+    // ==================== LOAD MORE ====================
+    let visibleCount = 8;
+
+    function initLoadMore() {
+      const cards = document.querySelectorAll('.product-card');
+      visibleCount = 8;
+      cards.forEach((card, i) => {
+        card.style.display = i < visibleCount ? '' : 'none';
+      });
+      updateLoadMoreBtn();
+    }
+
+    function loadMore() {
+      const cards = document.querySelectorAll('.product-card');
+      visibleCount = Math.min(visibleCount + 4, cards.length);
+      cards.forEach((card, i) => {
+        if (i < visibleCount) card.style.display = '';
+      });
+      updateLoadMoreBtn();
+      // Trigger fade-in for newly visible cards
+      setTimeout(observeFadeIn, 50);
+    }
+
+    function updateLoadMoreBtn() {
+      const cards = document.querySelectorAll('.product-card');
+      const remaining = cards.length - visibleCount;
+      const btn = document.getElementById('loadMoreBtn');
+      const wrap = document.getElementById('loadMoreWrap');
+      if (remaining <= 0) {
+        wrap.style.display = 'none';
+      } else {
+        wrap.style.display = 'flex';
+        btn.textContent = 'Load More (' + remaining + ' remaining)';
+      }
+    }
+
+    function updateProductCount() {
+      const visible = [...document.querySelectorAll('.product-card')].filter(c => c.style.display !== 'none').length;
+      document.getElementById('productCount').textContent = visible + ' Products';
+    }
+
+    // ==================== PANELS ====================
+    function closeAllPanels() {
+      document.getElementById('cartDrawer').classList.remove('open');
+      document.getElementById('filterSidebar').classList.remove('open');
+      document.getElementById('panelOverlay').classList.remove('open');
+    }
+
+    // ==================== MOBILE MENU ====================
+    function toggleMobileMenu() {
+      document.getElementById('mobileMenu').classList.toggle('open');
+    }
+
+    // ==================== ACCOUNT DROPDOWN ====================
+    function toggleAccountDropdown() {
+      document.getElementById('accountDropdown').classList.toggle('open');
+    }
+
+    // ==================== BACK TO TOP ====================
+    window.addEventListener('scroll', () => {
+      const btn = document.getElementById('backToTop');
+      btn.classList.toggle('visible', window.scrollY > 400);
+    });
+
+    // ==================== FADE IN ANIMATION ====================
+    function observeFadeIn() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('.fade-in:not(.visible)').forEach(el => observer.observe(el));
+    }
+
+    // ==================== TOAST ====================
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    // ==================== NEWSLETTER ====================
+    function subscribeNewsletter() {
+      const email = document.getElementById('newsletterEmail').value;
+      if (!email || !email.includes('@')) {
+        showToast('Please enter a valid email address');
+        return;
+      }
+      showToast('Thanks for subscribing! 🎉');
+      document.getElementById('newsletterEmail').value = '';
+    }
+
+    // ==================== PRODUCT MODAL ====================
+    let currentModalProduct = null;
+    let selectedModalSize = null;
+
+    function openProductModal(cardEl) {
+      currentModalProduct = {
+        name: cardEl.dataset.name,
+        price: cardEl.dataset.price,
+        origPrice: cardEl.dataset.origPrice,
+        sizes: cardEl.dataset.sizes.split(','),
+        category: cardEl.dataset.category,
+        reviews: cardEl.dataset.reviews,
+        color: cardEl.dataset.color
+      };
+      selectedModalSize = null;
+      const mainImg = cardEl.querySelector('.img-main');
+      document.getElementById('modalImage').innerHTML = '<img src="' + mainImg.src + '" alt="' + currentModalProduct.name + '" style="width:100%;height:100%;object-fit:cover;min-height:400px">';
+      const badge = cardEl.querySelector('.badge-sale');
+      const badgeEl = document.getElementById('modalBadge');
+      if (badge) {
+        badgeEl.textContent = badge.textContent;
+        badgeEl.style.display = 'inline-block';
+        badgeEl.style.background = badge.classList.contains('badge-new') ? '#22c55e' : 'var(--accent)';
+      } else { badgeEl.style.display = 'none'; }
+      document.getElementById('modalName').textContent = currentModalProduct.name;
+      const isSale = parseFloat(currentModalProduct.price) < parseFloat(currentModalProduct.origPrice);
+      document.getElementById('modalPrice').innerHTML = isSale
+        ? '<span class="price-sale text-xl font-bold">Rs.' + parseFloat(currentModalProduct.price).toLocaleString() + '</span><span class="price-orig">Rs.' + parseFloat(currentModalProduct.origPrice).toLocaleString() + '</span>'
+        : '<span class="text-xl font-bold">Rs.' + parseFloat(currentModalProduct.price).toLocaleString() + '</span>';
+      const rc = currentModalProduct.reviews;
+      document.getElementById('modalStars').innerHTML = '<span class="stars">\u2605\u2605\u2605\u2605\u2605</span><span class="text-xs" style="color:var(--muted)">' + (rc > 0 ? '(' + rc + ' reviews)' : 'No reviews yet') + '</span>';
+      document.getElementById('modalDesc').textContent = 'Premium ' + currentModalProduct.color + ' colorway. Engineered for performance and style. Features breathable mesh upper, cushioned midsole, and durable rubber outsole. Perfect for everyday wear and athletic activities.';
+      let sizesHtml = '';
+      currentModalProduct.sizes.forEach(s => {
+        sizesHtml += '<button class="size-btn" onclick="selectModalSize(this, \'' + s + '\')" style="min-width:44px;padding:8px 14px">' + s + '</button>';
+      });
+      document.getElementById('modalSizes').innerHTML = sizesHtml;
+      document.getElementById('productModal').classList.add('open');
+    }
+
+    function closeProductModal() {
+      document.getElementById('productModal').classList.remove('open');
+      currentModalProduct = null;
+      selectedModalSize = null;
+    }
+
+    function selectModalSize(btn, size) {
+      document.querySelectorAll('#modalSizes .size-btn').forEach(b => {
+        b.style.background = 'var(--bg)'; b.style.color = 'var(--text)'; b.style.borderColor = 'var(--border)';
+      });
+      btn.style.background = 'var(--accent)'; btn.style.color = '#fff'; btn.style.borderColor = 'var(--accent)';
+      selectedModalSize = size;
+    }
+
+    function modalAddToCart() {
+      if (!currentModalProduct) return;
+      if (!selectedModalSize) { showToast('Please select a size'); return; }
+      addToCart(currentModalProduct.name, currentModalProduct.price, selectedModalSize);
+      closeProductModal();
+    }
+
+    document.addEventListener('click', (e) => {
+      const card = e.target.closest('.product-card');
+      if (card && !e.target.closest('.quick-add-btn') && !e.target.closest('.size-btn') && !e.target.closest('.size-selector')) {
+        openProductModal(card);
+      }
+    });
+
+    // ==================== KEYBOARD SHORTCUTS ====================
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeSearch();
+        closeAllPanels();
+        closeSizeSelectors();
+        closeProductModal();
+        closeCheckoutModal();
+        document.getElementById('mobileMenu').classList.remove('open');
+        document.getElementById('accountDropdown').classList.remove('open');
+      }
+    });
+
+    // Close account dropdown on outside click
+    document.addEventListener('click', (e) => {
+      const dropdown = document.getElementById('accountDropdown');
+      if (dropdown.classList.contains('open') && !e.target.closest('.relative')) {
+        dropdown.classList.remove('open');
+      }
+    });
+
+    // ==================== INIT ====================
+    initTheme();
+    updateCartBadge();
+    initLoadMore();
+    observeFadeIn();
+  </script>
+
+</body>
+</html>
